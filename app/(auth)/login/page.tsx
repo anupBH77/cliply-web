@@ -4,9 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Login() {
   const router = useRouter();
+  const { checkAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
@@ -20,8 +22,8 @@ export default function Login() {
     try {
       await authApi.login({ email, password });
 
-      // const data = await response.json();
-      // localStorage.setItem("token", data.access_token);
+      // Refresh the global auth state now that the cookie is set
+      await checkAuth();
 
       router.push("/dashboard");
     } catch (err: any) {

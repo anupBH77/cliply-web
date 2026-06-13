@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { 
   Sparkles, Plus, ChevronDown, ChevronRight, Home, FileText, 
   MessageCircle, Database, CheckSquare, LayoutTemplate, Upload, 
-  Archive, Trash, Folder, FolderOpen, Menu, PanelLeftClose, PanelLeftOpen
+  Archive, Trash, Folder, FolderOpen, Menu, PanelLeftClose, PanelLeftOpen, LogOut
 } from "lucide-react";
+import { collectionsApi } from "../lib/api";
+import { Collection } from "../types";
+import { useAuth } from "../lib/AuthContext";
 
 type NavItem = {
   name: string;
@@ -17,7 +20,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { name: "Dashboard", icon: Home, href: "/dashboard" },
-  { name: "Notes", icon: FileText, href: "/dashboard/notes" },
+  { name: "Notes", icon: FileText, href: "/notes" },
   { name: "AI Chat", icon: MessageCircle, href: "/dashboard/chat" },
   { name: "Knowledge Base", icon: Database, href: "/dashboard/knowledge" },
   { name: "Tasks", icon: CheckSquare, href: "/dashboard/tasks" },
@@ -25,39 +28,13 @@ const navItems: NavItem[] = [
   { name: "Uploads", icon: Upload, href: "/dashboard/uploads" },
 ];
 
-type FolderNode = {
-  id: string;
-  name: string;
-  children?: FolderNode[];
-};
-
-const initialFolders: FolderNode[] = [
-  {
-    id: "work",
-    name: "Work",
-    children: [
-      { id: "projects", name: "Projects" },
-      { id: "meetings", name: "Meetings" },
-    ],
-  },
-  {
-    id: "personal",
-    name: "Personal",
-    children: [
-      { id: "journal", name: "Journal" },
-      { id: "learning", name: "Learning" },
-    ],
-  },
-  {
-    id: "ideas",
-    name: "Ideas",
-  },
-];
-
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const { user, logout } = useAuth();
   
   // Responsive handling for tablet collapse
   useEffect(() => {
@@ -74,11 +51,20 @@ export default function Sidebar() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
-    work: true,
-    personal: true,
-  });
-  const [activeFolder, setActiveFolder] = useState<string | null>(null);
+  // Fetch Collections
+  useEffect(() => {
+    collectionsApi.getCollections().then(setCollections).catch(() => {
+      // Mock for now
+      setCollections([
+        { id: "work", name: "Work" },
+        { id: "personal", name: "Personal" },
+        { id: "ideas", name: "Ideas" }
+      ]);
+    });
+  }, []);
+
+  // Simple flat collection structure for now as API returns Array<Collection>
+  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({});
 
   const toggleFolder = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -86,15 +72,16 @@ export default function Sidebar() {
     setExpandedFolders(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const renderFolder = (folder: FolderNode, level = 0) => {
-    const isExpanded = expandedFolders[folder.id];
-    const hasChildren = folder.children && folder.children.length > 0;
-    const isActive = activeFolder === folder.id;
+  const renderFolder = (folder: Collection, level = 0) => {
+    const folderIdStr = String(folder.id);
+    const isExpanded = expandedFolders[folderIdStr];
+    const hasChildren = false; // Mocking no children for now
+    const isActive = pathname.includes(`/collections/${folderIdStr}`);
 
     return (
       <div key={folder.id}>
         <div 
-          onClick={() => setActiveFolder(folder.id)}
+          onClick={() => router.push(`/collections/${folder.id}`)}
           className={`flex items-center gap-2 py-[6px] rounded-[10px] cursor-pointer transition-colors duration-200 text-sm group ${
             isActive ? "bg-[#F3F0FF] text-[#7C3AED]" : "text-[#6B7280] hover:bg-gray-100"
           }`}
@@ -102,7 +89,7 @@ export default function Sidebar() {
         >
           {hasChildren ? (
             <button 
-              onClick={(e) => toggleFolder(folder.id, e)} 
+              onClick={(e) => toggleFolder(folderIdStr, e)} 
               className="p-0.5 hover:bg-gray-200 rounded text-gray-400 group-hover:text-gray-600 transition-colors"
             >
               {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
@@ -119,14 +106,18 @@ export default function Sidebar() {
           
           <span className="truncate font-medium">{folder.name}</span>
         </div>
-        
-        {isExpanded && hasChildren && (
-          <div className="mt-0.5">
-            {folder.children!.map(child => renderFolder(child, level + 1))}
-          </div>
-        )}
       </div>
     );
+  };
+
+  const handleNewNote = () => {
+    router.push('/notes/new');
+    setIsMobileOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
   };
 
   const sidebarContent = (
@@ -157,19 +148,21 @@ export default function Sidebar() {
         <div>
           {isCollapsed ? (
             <button 
+              onClick={handleNewNote}
               className="w-full h-12 bg-gradient-to-r from-[#7C3AED] to-purple-500 rounded-xl text-white flex items-center justify-center hover:brightness-110 transition-all duration-200 shadow-sm"
               title="New Note"
-              onClick={() => setIsCollapsed(false)}
             >
               <Plus size={20} />
             </button>
           ) : (
-            <button className="w-full h-12 bg-gradient-to-r from-[#7C3AED] to-purple-500 rounded-xl text-white font-medium flex items-center justify-between px-4 hover:brightness-110 transition-all duration-200 shadow-sm">
+            <button 
+              onClick={handleNewNote}
+              className="w-full h-12 bg-gradient-to-r from-[#7C3AED] to-purple-500 rounded-xl text-white font-medium flex items-center justify-between px-4 hover:brightness-110 transition-all duration-200 shadow-sm"
+            >
               <div className="flex items-center gap-3">
                 <Plus size={20} />
                 <span>New Note</span>
               </div>
-              <ChevronDown size={16} className="opacity-80" />
             </button>
           )}
         </div>
@@ -177,11 +170,12 @@ export default function Sidebar() {
         {/* Main Navigation */}
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (pathname === '/' && item.href === '/dashboard');
+            const isActive = pathname.startsWith(item.href) && item.href !== '/' || (pathname === '/' && item.href === '/dashboard');
             return (
               <Link 
                 key={item.name} 
                 href={item.href}
+                onClick={() => setIsMobileOpen(false)}
                 className={`flex items-center gap-3 h-10 rounded-[10px] transition-colors duration-200 ${
                   isActive 
                     ? "bg-[#F3F0FF] text-[#7C3AED] font-medium" 
@@ -206,7 +200,13 @@ export default function Sidebar() {
               </button>
             </div>
             <div className="flex flex-col gap-0.5">
-              {initialFolders.map(folder => renderFolder(folder))}
+              {collections.length > 0 ? (
+                collections.map(folder => renderFolder(folder))
+              ) : (
+                <div className="px-3 text-xs text-gray-400 italic py-2">
+                  Create your first collection.
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -226,17 +226,23 @@ export default function Sidebar() {
 
       {/* User Profile Card */}
       <div className="p-4 bg-[#F9FAFB]">
-        <div className={`bg-white border border-[#E5E7EB] rounded-xl flex items-center hover:shadow-md transition-all cursor-pointer ${isCollapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}>
+        <div className={`bg-white border border-[#E5E7EB] rounded-xl flex items-center transition-all ${isCollapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}>
           <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7C3AED] to-pink-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm shadow-inner">
-            AK
+            {user?.name ? user.name.substring(0, 2).toUpperCase() : 'U'}
           </div>
           {!isCollapsed && (
             <div className="flex-1 overflow-hidden flex items-center justify-between">
               <div className="flex flex-col truncate pr-2">
-                <span className="text-sm font-semibold text-[#111827] truncate">Aman Kumar</span>
-                <span className="text-xs text-[#6B7280] truncate">aman@example.com</span>
+                <span className="text-sm font-semibold text-[#111827] truncate">{user?.name || 'User'}</span>
+                <span className="text-xs text-[#6B7280] truncate">{user?.email || 'user@example.com'}</span>
               </div>
-              <ChevronDown size={16} className="text-gray-400 flex-shrink-0" />
+              <button 
+                onClick={handleLogout}
+                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                title="Log out"
+              >
+                <LogOut size={16} />
+              </button>
             </div>
           )}
         </div>
@@ -278,7 +284,7 @@ export default function Sidebar() {
 
       {/* Sidebar Wrapper */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:block h-screen ${
+        className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:block h-screen flex-shrink-0 ${
           isMobileOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
         }`}
       >
