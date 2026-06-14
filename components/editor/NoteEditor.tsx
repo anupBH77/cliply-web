@@ -86,9 +86,8 @@ export default function NoteEditor({ initialNoteId, initialCollectionId = null }
             const newNote = await notesApi.createNote(payload);
             newNoteId = newNote.id;
           } catch (e) {
-            // Mock backend response if not available
-            newNoteId = "mock-" + Date.now();
-            console.log("Mock created", payload);
+            console.log("failed to save note", e)
+            newNoteId = "";
           }
           
           setNoteId(newNoteId);

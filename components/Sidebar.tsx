@@ -8,8 +8,8 @@ import {
   MessageCircle, Database, CheckSquare, LayoutTemplate, Upload, 
   Archive, Trash, Folder, FolderOpen, Menu, PanelLeftClose, PanelLeftOpen, LogOut
 } from "lucide-react";
-import { collectionsApi } from "../lib/api";
-import { Collection } from "../types";
+import { collectionsApi, notesApi } from "../lib/api";
+import { Collection, Note } from "../types";
 import { useAuth } from "../lib/AuthContext";
 
 type NavItem = {
@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
   { name: "Notes", icon: FileText, href: "/notes" },
   { name: "AI Chat", icon: MessageCircle, href: "/dashboard/chat" },
   { name: "Knowledge Base", icon: Database, href: "/dashboard/knowledge" },
-  { name: "Tasks", icon: CheckSquare, href: "/dashboard/tasks" },
+  { name: "Tasks", icon: CheckSquare, href: "/tasks" },
   { name: "Templates", icon: LayoutTemplate, href: "/dashboard/templates" },
   { name: "Uploads", icon: Upload, href: "/dashboard/uploads" },
 ];
@@ -34,6 +34,9 @@ export default function Sidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [isCreatingCollection, setIsCreatingCollection] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState("");
   const { user, logout } = useAuth();
   
   // Responsive handling for tablet collapse
@@ -51,17 +54,40 @@ export default function Sidebar() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch Collections
-  useEffect(() => {
-    collectionsApi.getCollections().then(setCollections).catch(() => {
-      // Mock for now
-      setCollections([
-        { id: "work", name: "Work" },
-        { id: "personal", name: "Personal" },
-        { id: "ideas", name: "Ideas" }
+  // Fetch Collections and Notes
+  const fetchData = async () => {
+    try {
+      const [colls, allNotes] = await Promise.all([
+        collectionsApi.getCollections(),
+        notesApi.getNotes()
       ]);
-    });
+      setCollections(colls);
+      setNotes(allNotes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const handleCreateCollectionSubmit = async (e: React.KeyboardEvent | React.FocusEvent) => {
+    if (e.type === 'keydown' && (e as React.KeyboardEvent).key !== 'Enter') return;
+    if (!newCollectionName.trim()) {
+      setIsCreatingCollection(false);
+      return;
+    }
+    try {
+      const newCollection = await collectionsApi.createCollection(newCollectionName.trim());
+      setCollections(prev => [...prev, newCollection]);
+      setExpandedFolders(prev => ({ ...prev, [String(newCollection.id)]: true }));
+    } catch (error) {
+      console.error("Failed to create collection", error);
+    }
+    setNewCollectionName("");
+    setIsCreatingCollection(false);
+  };
 
   // Simple flat collection structure for now as API returns Array<Collection>
   const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({});
@@ -75,7 +101,8 @@ export default function Sidebar() {
   const renderFolder = (folder: Collection, level = 0) => {
     const folderIdStr = String(folder.id);
     const isExpanded = expandedFolders[folderIdStr];
-    const hasChildren = false; // Mocking no children for now
+    const folderNotes = notes.filter(n => String(n.collection_id) === folderIdStr);
+    const hasChildren = folderNotes.length > 0;
     const isActive = pathname.includes(`/collections/${folderIdStr}`);
 
     return (
@@ -106,6 +133,26 @@ export default function Sidebar() {
           
           <span className="truncate font-medium">{folder.name}</span>
         </div>
+        {isExpanded && hasChildren && (
+          <div className="flex flex-col gap-0.5 mt-0.5">
+            {folderNotes.map(note => {
+              const isNoteActive = pathname === `/notes/${note.id}`;
+              return (
+                <Link
+                  key={note.id}
+                  href={`/notes/${note.id}`}
+                  className={`flex items-center gap-2 py-[6px] rounded-[10px] cursor-pointer transition-colors duration-200 text-sm ${
+                    isNoteActive ? "bg-[#F3F0FF] text-[#7C3AED]" : "text-[#6B7280] hover:bg-gray-100"
+                  }`}
+                  style={{ paddingLeft: `${level * 16 + 12 + 26}px`, paddingRight: '12px' }}
+                >
+                  <FileText size={14} className={isNoteActive ? "text-[#7C3AED]" : "text-gray-400"} />
+                  <span className="truncate">{note.title || "Untitled"}</span>
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </div>
     );
   };
@@ -121,21 +168,21 @@ export default function Sidebar() {
   };
 
   const sidebarContent = (
-    <div className={`flex flex-col h-full bg-[#F9FAFB] text-[#111827] border-r border-[#E5E7EB] transition-all duration-300 ease-in-out ${
+    <div className={`flex flex-col h-full transition-colors duration-300 ease-in-out border-r ${
       isCollapsed ? "w-[80px]" : "w-[260px]"
-    }`}>
+    } bg-[#F9FAFB] dark:bg-gray-900 text-[#111827] dark:text-gray-100 border-[#E5E7EB] dark:border-gray-800`}>
       {/* Brand Section */}
       <div className={`p-6 flex items-center h-[88px] ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center text-[#7C3AED] shadow-sm border border-purple-100">
-            <Sparkles size={20} />
+          <div className="p-1.5 rounded-lg mr-3 bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+            <Folder size={18} />
           </div>
-          {!isCollapsed && <span className="font-bold text-[20px] tracking-tight">Cliply</span>}
+          {!isCollapsed && <span className="font-medium text-[15px] truncate dark:text-gray-200">Collections</span>}
         </Link>
         {!isCollapsed && (
           <button 
             onClick={() => setIsCollapsed(true)} 
-            className="hidden md:flex p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-lg transition-colors"
+            className="hidden md:flex p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-lg transition-colors"
             title="Collapse Sidebar"
           >
             <PanelLeftClose size={18} />
@@ -176,14 +223,23 @@ export default function Sidebar() {
                 key={item.name} 
                 href={item.href}
                 onClick={() => setIsMobileOpen(false)}
-                className={`flex items-center gap-3 h-10 rounded-[10px] transition-colors duration-200 ${
+                className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative ${
                   isActive 
-                    ? "bg-[#F3F0FF] text-[#7C3AED] font-medium" 
-                    : "text-[#6B7280] hover:bg-gray-200/50"
-                } ${isCollapsed ? 'justify-center px-0' : 'px-3'}`}
+                    ? "bg-purple-50 text-[#7C3AED] dark:bg-purple-900/20 dark:text-purple-400 shadow-[0_1px_2px_rgba(124,58,237,0.05)]" 
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                }`}
                 title={isCollapsed ? item.name : undefined}
               >
-                <item.icon size={18} className={isActive ? "text-[#7C3AED]" : "text-gray-400"} />
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#7C3AED] rounded-r-full" />
+                )}
+                <div className={`p-1.5 rounded-lg mr-3 ${
+                  isActive 
+                    ? "bg-purple-100 text-[#7C3AED] dark:bg-purple-900/50 dark:text-purple-400" 
+                    : "bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-[#7C3AED] dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700"
+                }`}>
+                  <item.icon size={18} />
+                </div>
                 {!isCollapsed && <span>{item.name}</span>}
               </Link>
             )
@@ -193,9 +249,13 @@ export default function Sidebar() {
         {/* Collections */}
         {!isCollapsed && (
           <div className="flex flex-col gap-2 mt-2">
-            <div className="flex items-center justify-between px-3 group pt-6 border-t border-gray-200/60">
+            <div className="flex items-center justify-between px-3 group pt-6 border-t border-gray-200/60 dark:border-gray-800">
               <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Collections</h3>
-              <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded text-gray-500 transition-all">
+              <button 
+                onClick={() => setIsCreatingCollection(true)}
+                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 dark:hover:bg-gray-800 rounded text-gray-500 transition-all"
+                title="Create Collection"
+              >
                 <Plus size={14} />
               </button>
             </div>
@@ -207,38 +267,53 @@ export default function Sidebar() {
                   Create your first collection.
                 </div>
               )}
+              {isCreatingCollection && (
+                <div className="px-3 py-1 flex items-center gap-2">
+                  <Folder size={16} className="text-gray-400" />
+                  <input
+                    autoFocus
+                    type="text"
+                    value={newCollectionName}
+                    onChange={(e) => setNewCollectionName(e.target.value)}
+                    onKeyDown={handleCreateCollectionSubmit}
+                    onBlur={handleCreateCollectionSubmit}
+                    className="w-full text-sm pl-3 pr-2 py-1.5 bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-900/50 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 dark:text-gray-200 placeholder-gray-400"
+                    placeholder="Collection name..."
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
       </div>
 
       {/* Bottom Utility Section */}
-      <div className="px-3 py-3 flex flex-col gap-1 border-t border-[#E5E7EB]">
-        <Link href="/dashboard/archive" className={`flex items-center gap-3 h-10 rounded-[10px] text-[#6B7280] hover:bg-gray-200/50 transition-colors duration-200 ${isCollapsed ? 'justify-center px-0' : 'px-3'}`} title="Archive">
+      <div className="px-3 py-3 flex flex-col gap-1 border-t border-[#E5E7EB] dark:border-gray-800">
+        <Link href="/dashboard/archive" className={`flex items-center gap-3 h-10 rounded-[10px] text-[#6B7280] dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200 ${isCollapsed ? 'justify-center px-0' : 'px-3'}`} title="Archive">
           <Archive size={18} className="text-gray-400" />
           {!isCollapsed && <span className="font-medium text-sm">Archive</span>}
         </Link>
-        <Link href="/dashboard/trash" className={`flex items-center gap-3 h-10 rounded-[10px] text-[#6B7280] hover:bg-gray-200/50 transition-colors duration-200 ${isCollapsed ? 'justify-center px-0' : 'px-3'}`} title="Trash">
+        <Link href="/dashboard/trash" className={`flex items-center gap-3 h-10 rounded-[10px] text-[#6B7280] dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200 ${isCollapsed ? 'justify-center px-0' : 'px-3'}`} title="Trash">
           <Trash size={18} className="text-gray-400" />
           {!isCollapsed && <span className="font-medium text-sm">Trash</span>}
         </Link>
       </div>
 
       {/* User Profile Card */}
-      <div className="p-4 bg-[#F9FAFB]">
-        <div className={`bg-white border border-[#E5E7EB] rounded-xl flex items-center transition-all ${isCollapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}>
+      <div className="p-4 bg-[#F9FAFB] dark:bg-gray-900">
+        <div className={`bg-white dark:bg-gray-800 border border-[#E5E7EB] dark:border-gray-800 rounded-xl flex items-center transition-all ${isCollapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}>
           <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7C3AED] to-pink-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm shadow-inner">
             {user?.name ? user.name.substring(0, 2).toUpperCase() : 'U'}
           </div>
           {!isCollapsed && (
             <div className="flex-1 overflow-hidden flex items-center justify-between">
               <div className="flex flex-col truncate pr-2">
-                <span className="text-sm font-semibold text-[#111827] truncate">{user?.name || 'User'}</span>
-                <span className="text-xs text-[#6B7280] truncate">{user?.email || 'user@example.com'}</span>
+                <span className="text-sm font-semibold text-[#111827] dark:text-gray-200 truncate">{user?.name || 'User'}</span>
+                <span className="text-xs text-[#6B7280] dark:text-gray-500 truncate">{user?.email || 'user@example.com'}</span>
               </div>
               <button 
                 onClick={handleLogout}
-                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                className="p-1.5 hover:bg-purple-100 text-purple-600 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-lg transition-colors ml-auto"
                 title="Log out"
               >
                 <LogOut size={16} />

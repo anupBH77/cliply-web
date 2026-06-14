@@ -78,7 +78,7 @@ export default function EditorHeader({
               setIsCreating(false);
               setNewCollectionName("");
             }}
-            className="flex items-center gap-2 hover:bg-gray-100 px-2 py-1 rounded-md transition-colors"
+            className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded-md transition-colors"
           >
             <Folder size={16} />
             <span>{activeCollection ? activeCollection.name : "No Collection"}</span>
@@ -91,10 +91,10 @@ export default function EditorHeader({
                 className="fixed inset-0 z-10" 
                 onClick={() => setIsDropdownOpen(false)} 
               />
-              <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 overflow-hidden flex flex-col max-h-80">
+              <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 py-1 overflow-hidden flex flex-col max-h-80">
                 <div className="overflow-y-auto flex-1">
                   <button
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${!collectionId ? 'font-medium text-purple-600' : 'text-gray-700'}`}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${!collectionId ? 'font-medium text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-200'}`}
                     onClick={() => { onCollectionChange(null); setIsDropdownOpen(false); }}
                   >
                     No Collection
@@ -102,7 +102,7 @@ export default function EditorHeader({
                   {collections.map(c => (
                     <button
                       key={c.id}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${String(c.id) === String(collectionId) ? 'font-medium text-purple-600' : 'text-gray-700'}`}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${String(c.id) === String(collectionId) ? 'font-medium text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-200'}`}
                       onClick={() => { onCollectionChange(c.id); setIsDropdownOpen(false); }}
                     >
                       {c.name}
@@ -110,24 +110,24 @@ export default function EditorHeader({
                   ))}
                 </div>
                 
-                <div className="border-t border-gray-100 p-2">
+                <div className="border-t border-gray-100 dark:border-gray-700 p-2">
                   {isCreating ? (
                     <form onSubmit={handleCreateCollection} className="flex flex-col gap-2">
-                      <div className="flex items-center gap-1 border border-purple-300 rounded px-2 py-1 bg-purple-50 focus-within:border-purple-500 focus-within:ring-1 focus-within:ring-purple-200">
+                      <div className="flex items-center gap-1 border border-purple-300 dark:border-purple-800 rounded px-2 py-1 bg-purple-50 dark:bg-purple-900/30 focus-within:border-purple-500 dark:focus-within:border-purple-500 focus-within:ring-1 focus-within:ring-purple-200 dark:focus-within:ring-purple-900">
                         <input
                           ref={inputRef}
                           type="text"
                           value={newCollectionName}
                           onChange={(e) => setNewCollectionName(e.target.value)}
                           placeholder="Collection name"
-                          className="bg-transparent border-none outline-none text-sm w-full py-0.5 text-gray-800 placeholder:text-gray-400"
+                          className="bg-transparent border-none outline-none text-sm w-full py-0.5 text-gray-800 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                         />
                       </div>
                       <div className="flex items-center gap-1 justify-end">
                         <button
                           type="button"
                           onClick={() => { setIsCreating(false); setNewCollectionName(""); }}
-                          className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                          className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                         >
                           <X size={14} />
                         </button>
@@ -144,7 +144,7 @@ export default function EditorHeader({
                   ) : (
                     <button
                       onClick={() => setIsCreating(true)}
-                      className="w-full flex items-center gap-2 text-left px-2 py-1.5 text-sm text-purple-600 hover:bg-purple-50 rounded-md transition-colors"
+                      className="w-full flex items-center gap-2 text-left px-2 py-1.5 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-md transition-colors"
                     >
                       <Plus size={14} />
                       <span className="font-medium">New Collection</span>
@@ -166,7 +166,7 @@ export default function EditorHeader({
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
         placeholder="Untitled"
-        className="text-4xl font-bold text-gray-900 bg-transparent border-none outline-none placeholder:text-gray-300 w-full"
+        className="text-4xl font-bold text-gray-900 dark:text-gray-100 bg-transparent border-none outline-none placeholder:text-gray-300 dark:placeholder:text-gray-700 w-full"
       />
     </div>
   );

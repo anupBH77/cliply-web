@@ -93,7 +93,7 @@ export const authApi = {
   }
 };
 
-import { Note, Collection } from "../types";
+import { Note, Collection, Task } from "../types";
 
 export const notesApi = {
   getNotes: async (): Promise<Note[]> => {
@@ -134,12 +134,12 @@ export const notesApi = {
 
 export const collectionsApi = {
   getCollections: async (): Promise<Collection[]> => {
-    const response = await fetchWithAuth(`${API_BASE_URL}/collections`);
+    const response = await fetchWithAuth(`${API_BASE_URL}/collections/`);
     if (!response.ok) throw new Error("Failed to fetch collections");
     return response.json();
   },
   createCollection: async (name: string): Promise<Collection> => {
-    const response = await fetchWithAuth(`${API_BASE_URL}/collections`, {
+    const response = await fetchWithAuth(`${API_BASE_URL}/collections/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
@@ -152,5 +152,43 @@ export const collectionsApi = {
       method: "DELETE",
     });
     if (!response.ok) throw new Error("Failed to delete collection");
+  },
+};
+
+export const tasksApi = {
+  getTasks: async (): Promise<Task[]> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/tasks`);
+    if (!response.ok) throw new Error("Failed to fetch tasks");
+    return response.json();
+  },
+  getTask: async (id: string | number): Promise<Task> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/tasks/${id}`);
+    if (!response.ok) throw new Error("Failed to fetch task");
+    return response.json();
+  },
+  createTask: async (data: Partial<Task>): Promise<Task> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error("Failed to create task");
+    return response.json();
+  },
+  updateTask: async (id: string | number, data: Partial<Task>): Promise<Task> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/tasks/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error("Failed to update task");
+    return response.json();
+  },
+
+  deleteTask: async (id: string | number): Promise<void> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/tasks/${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) throw new Error("Failed to delete task");
   },
 };

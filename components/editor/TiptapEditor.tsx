@@ -28,7 +28,7 @@ export default function TiptapEditor({ initialContent, onChange, editable = true
     editable,
     editorProps: {
       attributes: {
-        class: 'prose prose-purple max-w-none focus:outline-none min-h-[500px]',
+        class: 'prose prose-purple dark:prose-invert max-w-none focus:outline-none min-h-[500px]',
       },
     },
     onUpdate: ({ editor }) => {
@@ -36,14 +36,19 @@ export default function TiptapEditor({ initialContent, onChange, editable = true
     },
   });
 
-  useEffect(() => {
-    if (editor && initialContent && !editor.isFocused) {
-      // Only set content initially if editor is empty to avoid overwriting ongoing edits
-      if (editor.isEmpty) {
-        editor.commands.setContent(initialContent);
-      }
-    }
-  }, [editor, initialContent]);
+useEffect(() => {
+  if (!editor || editor.isFocused || !editor.isEmpty) {
+    return;
+  }
+
+  if (
+    initialContent &&
+    typeof initialContent === "object" &&
+    initialContent.type === "doc"
+  ) {
+    editor.commands.setContent(initialContent);
+  }
+}, [editor, initialContent]);
 
   if (!editor) {
     return null;
