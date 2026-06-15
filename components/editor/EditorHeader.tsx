@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Folder, ChevronDown, Plus, Check, X } from "lucide-react";
+import { Folder, ChevronDown, Plus, Check, X, MoreHorizontal, Archive, Trash } from "lucide-react";
 import { collectionsApi } from "../../lib/api";
 import { Collection } from "../../types";
+import TitleInput from "./TitleInput";
+import SaveStatus from "./SaveStatus";
 
 interface EditorHeaderProps {
   title: string;
@@ -11,6 +13,9 @@ interface EditorHeaderProps {
   collectionId: string | number | null;
   onCollectionChange: (id: string | number | null) => void;
   saveStatus: "Saving..." | "Saved" | "";
+  onArchive?: () => void;
+  onDelete?: () => void;
+  noteId?: string | number | null;
 }
 
 export default function EditorHeader({
@@ -19,9 +24,13 @@ export default function EditorHeader({
   collectionId,
   onCollectionChange,
   saveStatus,
+  onArchive,
+  onDelete,
+  noteId,
 }: EditorHeaderProps) {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -156,18 +165,51 @@ export default function EditorHeader({
           )}
         </div>
         
-        <div className="text-gray-400 font-medium">
-          {saveStatus}
+        <div className="flex items-center gap-4">
+          <SaveStatus status={saveStatus as any} />
+          
+          {noteId && (
+            <div className="relative">
+              <button
+                onClick={() => setIsOptionsMenuOpen(!isOptionsMenuOpen)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors text-gray-500"
+              >
+                <MoreHorizontal size={18} />
+              </button>
+              
+              {isOptionsMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setIsOptionsMenuOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 py-1 overflow-hidden flex flex-col">
+                    <button
+                      onClick={() => {
+                        setIsOptionsMenuOpen(false);
+                        onArchive?.();
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2"
+                    >
+                      <Archive size={14} className="text-gray-400" />
+                      Archive
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsOptionsMenuOpen(false);
+                        onDelete?.();
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+                    >
+                      <Trash size={14} className="text-red-400" />
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
       
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => onTitleChange(e.target.value)}
-        placeholder="Untitled"
-        className="text-4xl font-bold text-gray-900 dark:text-gray-100 bg-transparent border-none outline-none placeholder:text-gray-300 dark:placeholder:text-gray-700 w-full"
-      />
+      <TitleInput title={title} onChange={onTitleChange} />
     </div>
   );
 }

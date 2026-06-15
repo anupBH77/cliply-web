@@ -1,5 +1,6 @@
 import React from "react";
 import NoteEditor from "../../../../components/editor/NoteEditor";
+import { useTheme } from "@/lib/ThemeContext";
 
 interface NewNotePageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -11,8 +12,6 @@ export default async function NewNotePage({ searchParams }: NewNotePageProps) {
   const collectionId = resolvedSearchParams.collectionId as string | undefined;
 
   return (
-    <div className="h-full w-full bg-white overflow-y-auto">
-      <NoteEditor initialCollectionId={collectionId} />
-    </div>
+    <NoteEditor initialCollectionId={collectionId} />
   );
 }

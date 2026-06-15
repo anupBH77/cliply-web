@@ -11,8 +11,6 @@ export default async function NotePage({ params }: NotePageProps) {
   const { noteId } = resolvedParams;
 
   return (
-    <div className="h-full w-full bg-white overflow-y-auto">
-      <NoteEditor initialNoteId={noteId} />
-    </div>
+    <NoteEditor initialNoteId={noteId} />
   );
 }

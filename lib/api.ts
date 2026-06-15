@@ -130,6 +130,34 @@ export const notesApi = {
     });
     if (!response.ok) throw new Error("Failed to delete note");
   },
+  archiveNote: async (id: string | number): Promise<void> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/notes/${id}/archive`, {
+      method: "PATCH",
+    });
+    if (!response.ok) throw new Error("Failed to archive note");
+  },
+  unarchiveNote: async (id: string | number): Promise<void> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/notes/${id}/unarchive`, {
+      method: "PATCH",
+    });
+    if (!response.ok) throw new Error("Failed to unarchive note");
+  },
+  restoreNote: async (id: string | number): Promise<void> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/notes/${id}/restore`, {
+      method: "PATCH",
+    });
+    if (!response.ok) throw new Error("Failed to restore note");
+  },
+  getArchivedNotes: async (): Promise<Note[]> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/notes?archived=true`);
+    if (!response.ok) throw new Error("Failed to fetch archived notes");
+    return response.json();
+  },
+  getDeletedNotes: async (): Promise<Note[]> => {
+    const response = await fetchWithAuth(`${API_BASE_URL}/notes?deleted=true`);
+    if (!response.ok) throw new Error("Failed to fetch deleted notes");
+    return response.json();
+  },
 };
 
 export const collectionsApi = {

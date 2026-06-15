@@ -1,4 +1,4 @@
-import { Search, Plus, Sun, Moon } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { useTheme } from "../../lib/ThemeContext";
 import Link from "next/link";
 
@@ -33,15 +33,7 @@ export default function NotesHeader({
       </div>
 
       <div className="flex items-center gap-3">
-        <button 
-          onClick={toggleTheme}
-          className={`p-2 rounded-lg transition-colors ${
-            isDarkMode ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-500 hover:bg-gray-100'
-          }`}
-          title="Toggle theme"
-        >
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+
 
         <Link 
           href="/notes/new"

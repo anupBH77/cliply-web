@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import debounce from "lodash.debounce";
 import EditorHeader from "./EditorHeader";
-import TiptapEditor from "./TiptapEditor";
+import Editor from "./Editor";
+import { useAutoSave } from "./hooks/useAutoSave";
 import { Note } from "../../types";
 import { notesApi } from "../../lib/api";
 
@@ -20,7 +20,7 @@ export default function NoteEditor({ initialNoteId, initialCollectionId = null }
   const [title, setTitle] = useState("");
   const [content, setContent] = useState<any>(null);
   const [collectionId, setCollectionId] = useState<string | number | null>(initialCollectionId);
-  const [saveStatus, setSaveStatus] = useState<"Saving..." | "Saved" | "">("");
+  // Handled by useAutoSave now
   const [isLoading, setIsLoading] = useState(!!initialNoteId);
 
   useEffect(() => {
@@ -55,60 +55,60 @@ export default function NoteEditor({ initialNoteId, initialCollectionId = null }
   useEffect(() => { collectionIdRef.current = collectionId; }, [collectionId]);
   useEffect(() => { noteIdRef.current = noteId; }, [noteId]);
 
-  const saveNote = useCallback(
-    debounce(async () => {
-      try {
-        setSaveStatus("Saving...");
-        
-        const payload = {
-          title: titleRef.current || "Untitled",
-          content: contentRef.current || {},
-          collection_id: collectionIdRef.current,
-        };
+  const onSave = useCallback(async () => {
+    const payload = {
+      title: titleRef.current || "Untitled",
+      content: contentRef.current || {},
+      collection_id: collectionIdRef.current,
+    };
 
-        if (noteIdRef.current) {
-          // Update existing note
-          await notesApi.updateNote(noteIdRef.current, payload).catch(() => {
-            // Ignore API error for now to simulate success if no backend
-            console.log("Mock saved", payload);
-          });
-          setSaveStatus("Saved");
-        } else {
-          // Create new note
-          // Only create if there's actual content or title changed
-          if (!titleRef.current && (!contentRef.current || Object.keys(contentRef.current).length === 0)) {
-             setSaveStatus("");
-             return;
-          }
-          
-          let newNoteId: string | number;
-          try {
-            const newNote = await notesApi.createNote(payload);
-            newNoteId = newNote.id;
-          } catch (e) {
-            console.log("failed to save note", e)
-            newNoteId = "";
-          }
-          
-          setNoteId(newNoteId);
-          setSaveStatus("Saved");
-          // Update URL without full reload
-          router.replace(`/notes/${newNoteId}`);
-        }
-      } catch (error) {
-        console.error("Failed to save note:", error);
-        setSaveStatus("Saved"); // Mock success anyway
+    if (noteIdRef.current) {
+      await notesApi.updateNote(noteIdRef.current, payload).catch((e) => {
+        console.log("Mock saved", payload);
+      });
+    } else {
+      if (!titleRef.current && (!contentRef.current || Object.keys(contentRef.current).length === 0)) {
+        return;
       }
-    }, 2000),
-    [router]
-  );
+      const newNote = await notesApi.createNote(payload).catch((e) => {
+        console.log("failed to create note", e);
+        return { id: "" };
+      });
+      if (newNote.id) {
+        setNoteId(newNote.id);
+        router.replace(`/notes/${newNote.id}`);
+      }
+    }
+  }, [router]);
+
+  const { saveStatus, markUnsaved } = useAutoSave({ onSave, delay: 2000 });
+
+  const handleArchive = async () => {
+    if (!noteId) return;
+    try {
+      await notesApi.archiveNote(noteId);
+      router.push("/notes");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!noteId) return;
+    try {
+      await notesApi.deleteNote(noteId);
+      router.push("/notes");
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   // Trigger auto-save on content/title changes
   useEffect(() => {
     // Skip initial empty states
     if (!title && !content && !noteId) return;
-    saveNote();
-  }, [title, content, collectionId, saveNote, noteId]);
+    markUnsaved();
+  }, [title, content, collectionId, markUnsaved, noteId]);
 
   if (isLoading) {
     return (
@@ -123,15 +123,18 @@ export default function NoteEditor({ initialNoteId, initialCollectionId = null }
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 pb-20">
+    <div className="w-full max-w-[800px] mx-auto px-6 pb-20">
       <EditorHeader 
         title={title}
         onTitleChange={setTitle}
         collectionId={collectionId}
         onCollectionChange={setCollectionId}
-        saveStatus={saveStatus}
+        saveStatus={saveStatus as any}
+        onArchive={handleArchive}
+        onDelete={handleDelete}
+        noteId={noteId}
       />
-      <TiptapEditor 
+      <Editor 
         initialContent={content} 
         onChange={setContent} 
       />

@@ -1,4 +1,4 @@
-import { Plus, Search, Sun, Moon } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { useTheme } from "../../lib/ThemeContext";
 
 export default function TasksHeader({ 
@@ -57,15 +57,7 @@ export default function TasksHeader({
           <option>Low</option>
         </select>
 
-        <button 
-          onClick={toggleTheme}
-          className={`p-2 rounded-lg transition-colors ${
-            isDarkMode ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-500 hover:bg-gray-100'
-          }`}
-          title="Toggle theme"
-        >
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+
 
         <button 
           onClick={onNewTask}

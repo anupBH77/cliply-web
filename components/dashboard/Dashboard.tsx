@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { notesApi, tasksApi } from "../../lib/api";
 import { Note, Task } from "../../types";
 import { FileText, CheckSquare } from "lucide-react";
+import { isToday, isTomorrow, format } from "date-fns";
 import DashboardHeader from "./DashboardHeader";
 import { useTheme } from "../../lib/ThemeContext";
 
@@ -170,10 +171,27 @@ export default function Dashboard() {
                                 className="w-5 h-5 rounded border-gray-300 text-[#7C3AED] focus:ring-[#7C3AED] cursor-pointer"
                               />
                               <div>
-                                <h4 className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>{task.title}</h4>
+                                <div className="flex items-center gap-2">
+                                  <h4 className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>{task.title}</h4>
+                                  {task.priority && (
+                                    <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full ${
+                                      task.priority === "high" ? "text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400" :
+                                      task.priority === "medium" ? "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                                      "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400"
+                                    }`}>
+                                      {task.priority}
+                                    </span>
+                                  )}
+                                </div>
                                 {task.due_date && (
-                                  <p className="text-xs text-gray-500 mt-1">
-                                    Due {new Date(task.due_date).toLocaleDateString()}
+                                  <p className={`text-xs mt-1 font-medium ${
+                                    isToday(new Date(task.due_date)) ? 'text-red-500 dark:text-red-400' :
+                                    isTomorrow(new Date(task.due_date)) ? 'text-orange-500 dark:text-orange-400' :
+                                    'text-gray-500 dark:text-gray-400'
+                                  }`}>
+                                    {isToday(new Date(task.due_date)) ? 'Today' :
+                                     isTomorrow(new Date(task.due_date)) ? 'Tomorrow' :
+                                     format(new Date(task.due_date), "MMM d")}
                                   </p>
                                 )}
                               </div>

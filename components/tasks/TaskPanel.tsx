@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { X, Trash2, Loader2, Calendar, AlertCircle } from "lucide-react";
+import { X, Trash2, Loader2, Calendar as CalendarIcon, AlertCircle } from "lucide-react";
+import { format } from "date-fns";
 import { Task } from "@/types";
 import { tasksApi } from "@/lib/api";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Task | null, onClose: () => void, onDeleteRequest: (id: string) => void }) {
   const queryClient = useQueryClient();
@@ -11,7 +16,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
   const [title, setTitle] = useState(task?.title || "");
   const [description, setDescription] = useState(task?.description || "");
   const [priority, setPriority] = useState(task?.priority || "medium");
-  const [dueDate, setDueDate] = useState(task?.due_date ? task.due_date.split('T')[0] : "");
+  const [dueDate, setDueDate] = useState<Date | undefined>(task?.due_date ? new Date(task.due_date) : undefined);
 
   // Animate slide-in state
   const [isVisible, setIsVisible] = useState(false);
@@ -45,7 +50,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
     };
 
     if (dueDate) {
-      payload.due_date = dueDate;
+      payload.due_date = format(dueDate, "yyyy-MM-dd");
     } else {
       payload.due_date = null;
     }
@@ -131,21 +136,34 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Due Date</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                    <Calendar size={16} className="text-gray-400" />
-                  </div>
-                  <input
-                    type="date"
-                    value={dueDate}
-                    onChange={(e) => {
-                      // format "2026-06-17"
-                      setDueDate(e.target.value)
-                    }}
-                    className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg pl-9 pr-3 py-2.5 focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none text-gray-900 dark:text-gray-100 transition-all"
-                    disabled={saveMutation.isPending}
-                  />
-                </div>
+                <Popover>
+                  <PopoverTrigger >
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/80 px-3 py-2.5 h-[42px] rounded-lg",
+                        !dueDate && "text-gray-400 dark:text-gray-500"
+                      )}
+                      disabled={saveMutation.isPending}
+                    >
+                      <CalendarIcon size={16} className="mr-2 opacity-50" />
+                      {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 z-[60]" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={dueDate}
+                      onSelect={setDueDate}
+                      disabled={(date) => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        return date < today;
+                      }}
+
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
 
