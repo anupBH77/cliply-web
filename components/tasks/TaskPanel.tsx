@@ -96,7 +96,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none text-gray-900 dark:text-gray-100 transition-all placeholder-gray-400 dark:placeholder-gray-500"
+                className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-zinc-900 dark:ring-zinc-100 focus:border-transparent outline-none text-gray-900 dark:text-gray-100 transition-all placeholder-gray-400 dark:placeholder-gray-500"
                 placeholder="What needs to be done?"
                 required
                 disabled={saveMutation.isPending}
@@ -108,7 +108,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none text-gray-900 dark:text-gray-100 min-h-[160px] resize-y transition-all placeholder-gray-400 dark:placeholder-gray-500"
+                className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-zinc-900 dark:ring-zinc-100 focus:border-transparent outline-none text-gray-900 dark:text-gray-100 min-h-[160px] resize-y transition-all placeholder-gray-400 dark:placeholder-gray-500"
                 placeholder="Add details, notes, or subtasks..."
                 disabled={saveMutation.isPending}
               />
@@ -121,7 +121,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
-                    className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none text-gray-900 dark:text-gray-100 appearance-none transition-all"
+                    className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-zinc-900 dark:ring-zinc-100 focus:border-transparent outline-none text-gray-900 dark:text-gray-100 appearance-none transition-all"
                     disabled={saveMutation.isPending}
                   >
                     <option value="low">Low</option>
@@ -168,11 +168,11 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
             </div>
 
             {isEditing && task.note_id && (
-              <div className="mt-2 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-900/50 flex gap-3 items-start">
-                <AlertCircle size={18} className="text-purple-600 dark:text-purple-400 mt-0.5" />
+              <div className="mt-2 bg-zinc-50 dark:bg-zinc-900/20 p-4 rounded-lg border border-zinc-100 dark:border-zinc-900/50 flex gap-3 items-start">
+                <AlertCircle size={18} className="text-zinc-600 dark:text-zinc-400 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-medium text-purple-900 dark:text-purple-300">Linked Note</h4>
-                  <p className="text-xs text-purple-700 dark:text-purple-400/80 mt-1">This task is attached to a note. You can view the note from the task board.</p>
+                  <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-300">Linked Note</h4>
+                  <p className="text-xs text-zinc-700 dark:text-zinc-400/80 mt-1">This task is attached to a note. You can view the note from the task board.</p>
                 </div>
               </div>
             )}
@@ -191,7 +191,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
           <button
             type="submit"
             form="task-form"
-            className="px-6 py-2.5 bg-[#7C3AED] hover:bg-purple-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2 text-sm shadow-sm"
+            className="px-6 py-2.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm shadow-sm"
             disabled={saveMutation.isPending || !title.trim()}
           >
             {saveMutation.isPending ? (

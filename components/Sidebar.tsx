@@ -114,7 +114,7 @@ export default function Sidebar() {
       <div key={folder.id}>
         <div
           onClick={() => router.push(`/collections/${folder.id}`)}
-          className={`flex items-center gap-2 py-[6px] rounded-[10px] cursor-pointer transition-colors duration-200 text-sm group ${isActive ? "bg-[#F3F0FF] text-[#7C3AED]" : "text-[#6B7280] hover:bg-gray-100"
+          className={`flex items-center gap-2 py-[6px] rounded-[10px] cursor-pointer transition-colors duration-200 text-sm group ${isActive ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100" : "text-[#6B7280] hover:bg-gray-100"
             }`}
           style={{ paddingLeft: `${level * 16 + 12}px`, paddingRight: '12px' }}
         >
@@ -130,9 +130,9 @@ export default function Sidebar() {
           )}
 
           {isExpanded && hasChildren ? (
-            <FcOpenedFolder size={16} className={isActive ? "text-[#7C3AED]" : "text-gray-400"} />
+            <FcOpenedFolder size={16} className={isActive ? "text-zinc-900 dark:text-zinc-100" : "text-gray-400"} />
           ) : (
-            <FcFolder size={16} className={isActive ? "text-[#7C3AED]" : "text-gray-400"} />
+            <FcFolder size={16} className={isActive ? "text-zinc-900 dark:text-zinc-100" : "text-gray-400"} />
           )}
 
           <span className="truncate font-medium">{folder.name}</span>
@@ -145,11 +145,11 @@ export default function Sidebar() {
                 <Link
                   key={note.id}
                   href={`/notes/${note.id}`}
-                  className={`flex items-center gap-2 py-[6px] rounded-[10px] cursor-pointer transition-colors duration-200 text-sm ${isNoteActive ? "bg-[#F3F0FF] text-[#7C3AED]" : "text-[#6B7280] hover:bg-gray-100"
+                  className={`flex items-center gap-2 py-[6px] rounded-[10px] cursor-pointer transition-colors duration-200 text-sm ${isNoteActive ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100" : "text-[#6B7280] hover:bg-gray-100"
                     }`}
                   style={{ paddingLeft: `${level * 16 + 12 + 26}px`, paddingRight: '12px' }}
                 >
-                  <FcDocument size={14} className={isNoteActive ? "text-[#7C3AED]" : "text-gray-400"} />
+                  <FcDocument size={14} className={isNoteActive ? "text-zinc-900 dark:text-zinc-100" : "text-gray-400"} />
                   <span className="truncate">{note.title || "Untitled"}</span>
                 </Link>
               )
@@ -172,7 +172,7 @@ export default function Sidebar() {
 
   const sidebarContent = (
     <div className={`flex flex-col h-full transition-colors duration-300 ease-in-out border-r ${isCollapsed ? "w-[80px]" : "w-[260px]"
-      } bg-[#F9FAFB] dark:bg-gray-900 text-[#111827] dark:text-gray-100 border-[#E5E7EB] dark:border-gray-800`}>
+      } bg-[#F9FAFB] dark:from-zinc-900  dark:to-zinc-950 dark:bg-gradient-to-r  text-[#111827] dark:text-gray-100 border-[#E5E7EB] dark:border-gray-800`}>
       {/* Brand Section */}
       <div className={`p-6 flex items-center h-[88px] ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
 
@@ -195,7 +195,7 @@ export default function Sidebar() {
           {isCollapsed ? (
             <button
               onClick={handleNewNote}
-              className="w-full h-12 bg-gradient-to-r from-[#7C3AED] to-purple-500 rounded-xl text-white flex items-center justify-center hover:brightness-110 transition-all duration-200 shadow-sm"
+              className="w-full h-12 dark:bg-white dark:text-black rounded-xl text-white flex items-center justify-center hover:brightness-110 transition-all duration-200 shadow-sm"
               title="New Note"
             >
               <Plus size={20} />
@@ -203,7 +203,7 @@ export default function Sidebar() {
           ) : (
             <button
               onClick={handleNewNote}
-              className="w-full h-12 bg-gradient-to-r from-[#7C3AED] to-purple-500 rounded-xl text-white font-medium flex items-center justify-between px-4 hover:brightness-110 transition-all duration-200 shadow-sm"
+              className="w-full h-12 dark:bg-white dark:text-black bg-black rounded-xl text-white font-medium flex items-center justify-between px-4 hover:brightness-110 transition-all duration-200 shadow-sm"
             >
               <div className="flex items-center gap-3">
                 <Plus size={20} />
@@ -223,17 +223,17 @@ export default function Sidebar() {
                 href={item.href}
                 onClick={() => setIsMobileOpen(false)}
                 className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group relative ${isActive
-                  ? "bg-purple-50 text-[#7C3AED] dark:bg-purple-900/20 dark:text-purple-400 shadow-[0_1px_2px_rgba(124,58,237,0.05)]"
+                  ? "bg-zinc-50 text-zinc-900 dark:text-zinc-100 dark:bg-zinc-900/20 dark:text-zinc-400 shadow-sm"
                   : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
                   }`}
                 title={isCollapsed ? item.name : undefined}
               >
                 {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#7C3AED] rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-zinc-900 dark:bg-zinc-100 rounded-r-full" />
                 )}
                 <div className={`p-1.5 rounded-lg mr-3 ${isActive
-                  ? "bg-purple-100 text-[#7C3AED] dark:bg-purple-900/50 dark:text-purple-400"
-                  : "bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-[#7C3AED] dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700"
+                  ? "bg-zinc-100 text-zinc-900 dark:text-zinc-100 dark:bg-zinc-900/50 dark:text-zinc-400"
+                  : "bg-gray-100 text-gray-500 group-hover:bg-white group-hover:text-zinc-900 dark:text-zinc-100 dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700"
                   }`}>
                   <item.icon size={18} />
                 </div>
@@ -274,7 +274,7 @@ export default function Sidebar() {
                     onChange={(e) => setNewCollectionName(e.target.value)}
                     onKeyDown={handleCreateCollectionSubmit}
                     onBlur={handleCreateCollectionSubmit}
-                    className="w-full text-sm pl-3 pr-2 py-1.5 bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-900/50 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 dark:text-gray-200 placeholder-gray-400"
+                    className="w-full text-sm pl-3 pr-2 py-1.5 bg-white dark:bg-gray-800 border border-zinc-200 dark:border-zinc-900/50 rounded focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:text-gray-200 placeholder-gray-400"
                     placeholder="Collection name..."
                   />
                 </div>
@@ -297,9 +297,9 @@ export default function Sidebar() {
       </div>
 
       {/* User Profile Card */}
-      <div className="p-4 bg-[#F9FAFB] dark:bg-gray-900">
-        <div className={`bg-white dark:bg-gray-800 border border-[#E5E7EB] dark:border-gray-800 rounded-xl flex items-center transition-all ${isCollapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7C3AED] to-pink-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm shadow-inner">
+      <div className="p-4 bg-[#F9FAFB] dark:from-zinc-900  dark:to-zinc-950 dark:bg-gradient-to-r">
+        <div className={`bg-white dark:bg-zinc-900 border border-[#E5E7EB] dark:border-gray-800 rounded-xl flex items-center transition-all ${isCollapsed ? 'p-2 justify-center' : 'p-3 gap-3'}`}>
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-zinc-900 dark:from-zinc-100 to-zinc-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm shadow-inner">
             {user?.name ? user.name.substring(0, 2).toUpperCase() : 'U'}
           </div>
           {!isCollapsed && (
@@ -310,7 +310,7 @@ export default function Sidebar() {
               </div>
               <button
                 onClick={handleLogout}
-                className="p-1.5 hover:bg-purple-100 text-purple-600 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-lg transition-colors ml-auto"
+                className="p-1.5 hover:bg-zinc-100 text-zinc-600 dark:hover:bg-zinc-900/50 dark:text-zinc-400 rounded-lg transition-colors ml-auto"
                 title="Log out"
               >
                 <LogOut size={16} />

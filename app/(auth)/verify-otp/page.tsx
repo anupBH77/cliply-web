@@ -67,7 +67,7 @@ function VerifyEmailForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="you@example.com"
             />
           </div>
@@ -83,7 +83,7 @@ function VerifyEmailForm() {
             value={otp}
             onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
             required
-            className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 text-center tracking-[0.5em] font-mono text-xl"
+            className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300 text-center tracking-[0.5em] font-mono text-xl"
             placeholder="000000"
             maxLength={6}
           />
@@ -92,7 +92,7 @@ function VerifyEmailForm() {
         <button
           type="submit"
           disabled={isLoading || otp.length !== 6}
-          className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold hover:from-green-500 hover:to-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+          className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-zinc-600 to-zinc-600 text-white font-semibold hover:from-zinc-500 hover:to-zinc-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
         >
           {isLoading ? (
             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -118,8 +118,8 @@ export default function verifyEmail() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 px-4 relative overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-green-600/30 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-emerald-600/30 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-zinc-600/30 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-zinc-600/30 rounded-full blur-[120px] pointer-events-none" />
       
       <Suspense fallback={
         <div className="w-full max-w-md p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl relative z-10 my-8 flex justify-center py-20">

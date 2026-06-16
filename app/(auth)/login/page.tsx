@@ -36,8 +36,8 @@ export default function Login() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 px-4 relative overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/30 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600/30 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-zinc-600/30 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-zinc-600/30 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="w-full max-w-md p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl relative z-10">
         <div className="mb-8 text-center">
@@ -62,7 +62,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="you@example.com"
             />
           </div>
@@ -72,7 +72,7 @@ export default function Login() {
               <label className="block text-sm font-medium text-gray-300" htmlFor="password">
                 Password
               </label>
-              <Link href="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">Forgot password?</Link>
+              <Link href="/forgot-password" className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">Forgot password?</Link>
             </div>
             <input 
               type="password" 
@@ -80,7 +80,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="••••••••"
             />
           </div>
@@ -88,7 +88,7 @@ export default function Login() {
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-500 hover:to-purple-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-zinc-600 to-zinc-600 text-white font-semibold hover:from-zinc-500 hover:to-zinc-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (
               <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -103,7 +103,7 @@ export default function Login() {
         
         <div className="mt-6 text-center text-sm text-gray-400">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">Sign up</Link>
+          <Link href="/signup" className="text-zinc-400 hover:text-zinc-300 font-medium transition-colors">Sign up</Link>
         </div>
         
         <div className="mt-8 pt-6 border-t border-gray-800 text-center">

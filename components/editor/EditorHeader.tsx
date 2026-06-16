@@ -69,7 +69,7 @@ export default function EditorHeader({
       setCollections([...collections, mockCollection]);
       onCollectionChange(mockId);
     }
-    
+
     setNewCollectionName("");
     setIsCreating(false);
     setIsDropdownOpen(false);
@@ -78,10 +78,10 @@ export default function EditorHeader({
   const activeCollection = collections.find(c => String(c.id) === String(collectionId));
 
   return (
-    <div className="flex flex-col gap-4 mb-8 pt-4">
-      <div className="flex items-center justify-between text-sm text-gray-500">
+    <div className="flex flex-col gap-4 mb-8 pt-4 dark:bg-zinc-950">
+      <div className="flex items-center justify-between text-sm text-gray-500 dark:bg-zinc-950">
         <div className="relative">
-          <button 
+          <button
             onClick={() => {
               setIsDropdownOpen(!isDropdownOpen);
               setIsCreating(false);
@@ -93,17 +93,17 @@ export default function EditorHeader({
             <span>{activeCollection ? activeCollection.name : "No Collection"}</span>
             <ChevronDown size={14} />
           </button>
-          
+
           {isDropdownOpen && (
             <>
-              <div 
-                className="fixed inset-0 z-10" 
-                onClick={() => setIsDropdownOpen(false)} 
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setIsDropdownOpen(false)}
               />
               <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 py-1 overflow-hidden flex flex-col max-h-80">
                 <div className="overflow-y-auto flex-1">
                   <button
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${!collectionId ? 'font-medium text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-200'}`}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${!collectionId ? 'font-medium text-zinc-600 dark:text-zinc-400' : 'text-gray-700 dark:text-gray-200'}`}
                     onClick={() => { onCollectionChange(null); setIsDropdownOpen(false); }}
                   >
                     No Collection
@@ -111,18 +111,18 @@ export default function EditorHeader({
                   {collections.map(c => (
                     <button
                       key={c.id}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${String(c.id) === String(collectionId) ? 'font-medium text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-200'}`}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${String(c.id) === String(collectionId) ? 'font-medium text-zinc-600 dark:text-zinc-400' : 'text-gray-700 dark:text-gray-200'}`}
                       onClick={() => { onCollectionChange(c.id); setIsDropdownOpen(false); }}
                     >
                       {c.name}
                     </button>
                   ))}
                 </div>
-                
+
                 <div className="border-t border-gray-100 dark:border-gray-700 p-2">
                   {isCreating ? (
                     <form onSubmit={handleCreateCollection} className="flex flex-col gap-2">
-                      <div className="flex items-center gap-1 border border-purple-300 dark:border-purple-800 rounded px-2 py-1 bg-purple-50 dark:bg-purple-900/30 focus-within:border-purple-500 dark:focus-within:border-purple-500 focus-within:ring-1 focus-within:ring-purple-200 dark:focus-within:ring-purple-900">
+                      <div className="flex items-center gap-1 border border-zinc-300 dark:border-zinc-800 rounded px-2 py-1 bg-zinc-50 dark:bg-zinc-900/30 focus-within:border-zinc-500 dark:focus-within:border-zinc-500 focus-within:ring-1 focus-within:ring-zinc-200 dark:focus-within:ring-zinc-900">
                         <input
                           ref={inputRef}
                           type="text"
@@ -143,7 +143,7 @@ export default function EditorHeader({
                         <button
                           type="submit"
                           disabled={!newCollectionName.trim()}
-                          className="flex items-center gap-1 text-xs font-medium text-white bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 px-2 py-1 rounded transition-colors"
+                          className="flex items-center gap-1 text-xs font-medium text-white bg-zinc-600 hover:bg-zinc-700 disabled:bg-zinc-300 px-2 py-1 rounded transition-colors"
                         >
                           <Check size={12} />
                           <span>Save</span>
@@ -153,7 +153,7 @@ export default function EditorHeader({
                   ) : (
                     <button
                       onClick={() => setIsCreating(true)}
-                      className="w-full flex items-center gap-2 text-left px-2 py-1.5 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-md transition-colors"
+                      className="w-full flex items-center gap-2 text-left px-2 py-1.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900/30 rounded-md transition-colors"
                     >
                       <Plus size={14} />
                       <span className="font-medium">New Collection</span>
@@ -164,10 +164,10 @@ export default function EditorHeader({
             </>
           )}
         </div>
-        
+
         <div className="flex items-center gap-4">
           <SaveStatus status={saveStatus as any} />
-          
+
           {noteId && (
             <div className="relative">
               <button
@@ -176,7 +176,7 @@ export default function EditorHeader({
               >
                 <MoreHorizontal size={18} />
               </button>
-              
+
               {isOptionsMenuOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setIsOptionsMenuOpen(false)} />
@@ -208,7 +208,7 @@ export default function EditorHeader({
           )}
         </div>
       </div>
-      
+
       <TitleInput title={title} onChange={onTitleChange} />
     </div>
   );

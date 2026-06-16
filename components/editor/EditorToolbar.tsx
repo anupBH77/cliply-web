@@ -87,7 +87,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           title: item.name,
           className: cn(
             "p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors",
-            isActive ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300" : "text-gray-600 dark:text-gray-300",
+            isActive ? "bg-zinc-100 text-zinc-700 dark:bg-zinc-900/40 dark:text-zinc-300" : "text-gray-600 dark:text-gray-300",
             isDisabled ? "opacity-50 cursor-not-allowed hover:bg-transparent dark:hover:bg-transparent" : ""
           )
         };
@@ -106,14 +106,14 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
                     value={linkUrl}
                     onChange={(e) => setLinkUrl(e.target.value)}
                     placeholder="Enter link URL..."
-                    className="flex-1 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="flex-1 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-zinc-500"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") applyLink();
                     }}
                   />
                   <button
                     onClick={applyLink}
-                    className="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium"
+                    className="px-3 py-1.5 text-sm bg-zinc-600 text-white rounded-md hover:bg-zinc-700 transition-colors font-medium"
                   >
                     Apply
                   </button>
@@ -137,14 +137,14 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
                     value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
                     placeholder="Enter image URL..."
-                    className="flex-1 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="flex-1 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-zinc-500"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") applyImage();
                     }}
                   />
                   <button
                     onClick={applyImage}
-                    className="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium"
+                    className="px-3 py-1.5 text-sm bg-zinc-600 text-white rounded-md hover:bg-zinc-700 transition-colors font-medium"
                   >
                     Add
                   </button>

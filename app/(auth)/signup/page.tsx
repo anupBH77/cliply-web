@@ -38,8 +38,8 @@ export default function SignUp() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 px-4 relative overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-purple-600/30 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-cyan-600/30 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-zinc-600/30 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-zinc-600/30 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="w-full max-w-md p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl relative z-10 my-8">
         <div className="mb-8 text-center">
@@ -64,7 +64,7 @@ export default function SignUp() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="John Doe"
             />
           </div>
@@ -79,7 +79,7 @@ export default function SignUp() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="you@example.com"
             />
           </div>
@@ -94,7 +94,7 @@ export default function SignUp() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="••••••••"
             />
           </div>
@@ -109,7 +109,7 @@ export default function SignUp() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent transition-all duration-300"
               placeholder="••••••••"
             />
           </div>
@@ -117,7 +117,7 @@ export default function SignUp() {
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 rounded-lg mt-2 bg-gradient-to-r from-purple-600 to-cyan-600 text-white font-semibold hover:from-purple-500 hover:to-cyan-500 shadow-[0_0_20px_rgba(147,51,234,0.3)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full py-3 px-4 rounded-lg mt-2 bg-gradient-to-r from-zinc-600 to-zinc-600 text-white font-semibold hover:from-zinc-500 hover:to-zinc-500 shadow-[0_0_20px_rgba(147,51,234,0.3)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (
               <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@ export default function SignUp() {
         
         <div className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{" "}
-          <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">Sign in</Link>
+          <Link href="/login" className="text-zinc-400 hover:text-zinc-300 font-medium transition-colors">Sign in</Link>
         </div>
       </div>
     </div>

@@ -47,22 +47,19 @@ export default function TrashPage() {
   );
 
   return (
-    <div className={`flex flex-col h-full transition-colors duration-200 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50'}`}>
-      <div className={`border-b px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-10 transition-colors ${isDarkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}>
+    <div className={`flex flex-col h-full transition-colors duration-200 dark:bg-zinc-950`}>
+      <div className="border-b px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-10 transition-colors bg-white dark:from-zinc-900  dark:to-zinc-950 dark:bg-gradient-to-r border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-4 flex-1">
-          <h1 className={`text-2xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Trash</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Trash</h1>
           <div className="relative max-w-md w-full">
-            <Search size={16} className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-            <input 
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+            <input
               type="text"
               placeholder="Search trash..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full pl-9 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] transition-all ${
-                isDarkMode 
-                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500' 
-                  : 'bg-gray-50 border-gray-200 text-gray-900 focus:bg-white'
-              }`}
+              className="w-full pl-9 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:ring-zinc-100 transition-all bg-gray-50 dark:from-zinc-900  dark:to-zinc-950 dark:bg-gradient-to-r text-gray-900 focus:bg-white dark:bg-gray-800 dark:border-zinc-800 dark:text-white dark:placeholder-gray-400"
+
             />
           </div>
         </div>
@@ -72,7 +69,7 @@ export default function TrashPage() {
         <div className="w-full mx-auto">
           {isLoading ? (
             <div className="flex justify-center p-12 text-gray-500">
-              <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-[#7C3AED]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-zinc-900 dark:text-zinc-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -105,7 +102,7 @@ export default function TrashPage() {
                     </div>
                     <button
                       onClick={(e) => handleRestore(e, note.id)}
-                      className="opacity-0 group-hover:opacity-100 p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-2 text-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/30 rounded-lg transition-all"
                       title="Restore Note"
                     >
                       <RotateCcw size={18} />

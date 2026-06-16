@@ -11,7 +11,7 @@ export default function TaskColumn({ id, title, tasks, onEdit }: { id: string, t
   return (
     <div 
       ref={setNodeRef}
-      className={`flex flex-col w-[320px] max-h-full flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-xl transition-colors ${isOver ? 'ring-2 ring-purple-400 ring-inset bg-purple-50/30 dark:bg-purple-900/30' : ''}`}
+      className={`flex flex-col w-[320px] max-h-full flex-shrink-0 bg-gray-100/50 dark:bg-gray-800/50 rounded-xl transition-colors ${isOver ? 'ring-2 ring-zinc-400 ring-inset bg-zinc-50/30 dark:bg-zinc-900/30' : ''}`}
     >
       <div className="p-4 font-semibold text-gray-700 dark:text-gray-300 flex items-center justify-between">
         <span className="text-sm tracking-wide">{title}</span>

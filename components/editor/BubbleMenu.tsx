@@ -85,7 +85,7 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
           onClick={item.command}
           className={cn(
             "p-2 flex items-center justify-center rounded-md hover:bg-gray-800 transition-colors",
-            item.isActive() ? "text-purple-400 bg-gray-800" : "text-gray-300"
+            item.isActive() ? "text-zinc-400 bg-gray-800" : "text-gray-300"
           )}
           title={item.name}
         >

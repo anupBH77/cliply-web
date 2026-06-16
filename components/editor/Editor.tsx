@@ -56,7 +56,7 @@ export default function Editor({ initialContent, onChange, editable = true }: Ed
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-purple-600 dark:text-purple-400 underline decoration-purple-300 underline-offset-2 cursor-pointer",
+          class: "text-zinc-600 dark:text-zinc-400 underline decoration-purple-300 underline-offset-2 cursor-pointer",
         },
       }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -111,7 +111,7 @@ export default function Editor({ initialContent, onChange, editable = true }: Ed
   return (
     <div className="relative w-full flex flex-col">
       <EditorToolbar editor={editor} />
-      <div className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden">
+      <div className="w-full bg-white dark:bg-zinc-900/10 border border-gray-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden">
         <BubbleMenu editor={editor} />
         <EditorContent editor={editor} />
       </div>

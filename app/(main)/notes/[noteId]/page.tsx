@@ -11,6 +11,8 @@ export default async function NotePage({ params }: NotePageProps) {
   const { noteId } = resolvedParams;
 
   return (
-    <NoteEditor initialNoteId={noteId} />
+    <div className={`flex flex-col h-full transition-colors duration-200 dark:bg-zinc-950`}>
+      <NoteEditor initialNoteId={noteId} />
+    </div>
   );
 }

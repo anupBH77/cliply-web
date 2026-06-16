@@ -141,7 +141,7 @@ export default function TasksBoard() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className={`flex flex-col h-full transition-colors duration-200 dark:bg-zinc-950`}>
       <TasksHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -152,7 +152,7 @@ export default function TasksBoard() {
         onNewTask={openNewTaskPanel}
       />
 
-      <div className="flex-1 overflow-x-auto p-6 relative">
+      <div className="flex-1 overflow-x-auto  border-zinc-700 p-6 relative">
         {isLoading ? (
           <div className="flex gap-6 h-full items-start">
             {[1, 2, 3].map(i => (
@@ -165,7 +165,7 @@ export default function TasksBoard() {
             <p className="text-sm mb-6 max-w-md text-center">Capture actionable items, build out your board, and boost your productivity.</p>
             <button
               onClick={openNewTaskPanel}
-              className="bg-[#7C3AED] hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm"
+              className="bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm"
             >
               Create First Task
             </button>
@@ -179,7 +179,7 @@ export default function TasksBoard() {
                 setStatusFilter("All");
                 setPriorityFilter("All");
               }}
-              className="mt-4 text-[#7C3AED] hover:text-purple-700 font-medium"
+              className="mt-4 text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 font-medium"
             >
               Clear Filters
             </button>

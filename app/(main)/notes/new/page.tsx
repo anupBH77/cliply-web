@@ -12,6 +12,9 @@ export default async function NewNotePage({ searchParams }: NewNotePageProps) {
   const collectionId = resolvedSearchParams.collectionId as string | undefined;
 
   return (
-    <NoteEditor initialCollectionId={collectionId} />
+    <div className={`flex flex-col h-full transition-colors duration-200 dark:bg-zinc-950`}>
+
+      <NoteEditor initialCollectionId={collectionId} />
+    </div>
   );
 }

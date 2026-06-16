@@ -52,8 +52,8 @@ export default function TaskCard({ task, onEdit, isOverlay = false }: { task: Ta
   const getPriorityColor = (p: string) => {
     switch (p) {
       case 'high': return 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/30 dark:border-red-900/50 dark:text-red-400';
-      case 'medium': return 'bg-orange-50 text-orange-600 border border-orange-200 dark:bg-orange-900/30 dark:border-orange-900/50 dark:text-orange-400';
-      case 'low': return 'bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-900/30 dark:border-blue-900/50 dark:text-blue-400';
+      case 'medium': return 'bg-zinc-50 text-zinc-600 border border-zinc-200 dark:bg-zinc-900/30 dark:border-zinc-900/50 dark:text-zinc-400';
+      case 'low': return 'bg-zinc-50 text-zinc-600 border border-zinc-200 dark:bg-zinc-900/30 dark:border-zinc-900/50 dark:text-zinc-400';
       default: return 'bg-gray-50 text-gray-600 border border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400';
     }
   };
@@ -71,7 +71,7 @@ export default function TaskCard({ task, onEdit, isOverlay = false }: { task: Ta
       Icon = AlertCircle;
     } else if (isToday(date)) {
       label = "Today";
-      colorClass = "text-[#7C3AED] font-medium";
+      colorClass = "text-zinc-900 dark:text-zinc-100 font-medium";
     } else if (isTomorrow(date)) {
       label = "Tomorrow";
     }
@@ -89,7 +89,7 @@ export default function TaskCard({ task, onEdit, isOverlay = false }: { task: Ta
       ref={setNodeRef}
       style={style}
       className={`bg-white dark:bg-gray-800 border rounded-xl p-3.5 cursor-pointer transition-all group relative
-        ${isDragging ? 'opacity-50 ring-2 ring-[#7C3AED] border-transparent shadow-lg' : 'border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-[#7C3AED]/30 dark:hover:border-[#7C3AED]/50'}
+        ${isDragging ? 'opacity-50 ring-2 ring-zinc-900 dark:ring-zinc-100 border-transparent shadow-lg' : 'border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-zinc-900 dark:border-zinc-100/30 dark:hover:border-zinc-900 dark:border-zinc-100/50'}
         ${isOverlay ? 'shadow-xl scale-[1.02] rotate-2 cursor-grabbing z-50' : ''}
       `}
       onClick={onEdit}
@@ -102,7 +102,7 @@ export default function TaskCard({ task, onEdit, isOverlay = false }: { task: Ta
           checked={task.status === "completed"}
           onChange={handleCheckboxChange}
           onPointerDown={(e) => e.stopPropagation()} // stop drag on checkbox
-          className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#7C3AED] focus:ring-[#7C3AED] cursor-pointer"
+          className="mt-0.5 w-4 h-4 rounded border-gray-300 text-zinc-900 dark:text-zinc-100 focus:ring-zinc-900 dark:ring-zinc-100 cursor-pointer"
         />
         <div className="flex-1">
           <h4 className={`font-medium text-sm leading-snug ${task.status === 'completed' ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100'}`}>
@@ -132,7 +132,7 @@ export default function TaskCard({ task, onEdit, isOverlay = false }: { task: Ta
               router.push(`/notes/${task.note_id}`);
             }}
             onPointerDown={(e) => e.stopPropagation()}
-            className="text-gray-400 hover:text-[#7C3AED] transition-colors p-1 rounded-md hover:bg-purple-50 dark:hover:bg-purple-900/30"
+            className="text-gray-400 hover:text-zinc-900 dark:text-zinc-100 transition-colors p-1 rounded-md hover:bg-zinc-50 dark:hover:bg-zinc-900/30"
             title="Linked Note"
           >
             <FileText size={14} />
