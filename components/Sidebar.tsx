@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
   // { name: "Knowledge Base", icon: Database, href: "/dashboard/knowledge" },
   { name: "Tasks", icon: CheckSquare, href: "/tasks" },
   // { name: "Templates", icon: LayoutTemplate, href: "/dashboard/templates" },
-  { name: "Uploads", icon: Upload, href: "/dashboard/uploads" },
+  // { name: "Uploads", icon: Upload, href: "/dashboard/uploads" },
 ];
 
 export default function Sidebar() {
