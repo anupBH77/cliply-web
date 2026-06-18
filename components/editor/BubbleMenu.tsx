@@ -76,7 +76,7 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
   return (
     <TiptapBubbleMenu
       editor={editor}
-      tippyOptions={{ duration: 100, placement: 'top' }}
+      // tippyOptions={{ duration: 100, placement: 'top' }}
       className="flex bg-gray-900 text-white rounded-lg shadow-xl overflow-hidden p-1 border border-gray-800"
     >
       {items.map((item, index) => (

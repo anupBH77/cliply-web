@@ -95,7 +95,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         if (item.name === "link") {
           return (
             <Popover key={index} open={isLinkOpen} onOpenChange={handleLinkOpen}>
-              <PopoverTrigger asChild>
+              <PopoverTrigger >
                 <button {...buttonProps}><Icon size={16} /></button>
               </PopoverTrigger>
               <PopoverContent className="w-80 p-3" align="start" sideOffset={8}>
@@ -126,7 +126,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         if (item.name === "image") {
           return (
             <Popover key={index} open={isImageOpen} onOpenChange={setIsImageOpen}>
-              <PopoverTrigger asChild>
+              <PopoverTrigger >
                 <button {...buttonProps}><Icon size={16} /></button>
               </PopoverTrigger>
               <PopoverContent className="w-80 p-3" align="start" sideOffset={8}>

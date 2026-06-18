@@ -120,7 +120,7 @@ export default function TaskPanel({ task, onClose, onDeleteRequest }: { task: Ta
                 <div className="relative">
                   <select
                     value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setPriority(e.target.value as "low" | "medium" | "high")}
                     className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-zinc-900 dark:ring-zinc-100 focus:border-transparent outline-none text-gray-900 dark:text-gray-100 appearance-none transition-all"
                     disabled={saveMutation.isPending}
                   >
